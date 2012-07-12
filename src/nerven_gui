@@ -1,0 +1,15 @@
+#! /usr/bin/python
+
+import sys
+from optparse import OptionParser
+import wx
+from nerven import NervenFrame
+
+op = OptionParser()
+op.add_option('-s', '--stream', dest='stream_path', default='/dev/nervend', help='path to raw data stream')
+opts, args = op.parse_args()
+app = wx.App(0)
+NervenFrame(None, -1, opts)
+app.MainLoop()
+        
+        
