@@ -6,6 +6,7 @@ from SensorPlotPanel import SensorPlotPanel
 from CapturePanel import CapturePanel
 from FftPanel import FftPanel
 from FourierSumPanel import FourierSumPanel
+from BrainWavePanel import BrainWavePanel
 from consts import *
 from conf import *
 
@@ -48,13 +49,15 @@ class NervenFrame(wx.Frame):
         self.capture_panel = CapturePanel(self.nb, self.epoc)
         self.qual_panel = QualityPanel(self.nb, self.epoc)
         self.plot_panel = SensorPlotPanel(self.nb, self.epoc)
-        self.fft_panel = FftPanel(self.nb, self.epoc)
-        self.fourier_sum_panel = FourierSumPanel(self.nb, self.epoc)
+#        self.fft_panel = FftPanel(self.nb, self.epoc)
+#        self.fourier_sum_panel = FourierSumPanel(self.nb, self.epoc)
+        self.brain_wave_panel = BrainWavePanel(self.nb, self.epoc)
         self.nb.AddPage(self.capture_panel, "Capture")
         self.nb.AddPage(self.qual_panel, "Sensor quality")
         self.nb.AddPage(self.plot_panel, "Plot")
-        self.nb.AddPage(self.fft_panel, "Fourier")
-        self.nb.AddPage(self.fourier_sum_panel, "Fourier sum")
+#        self.nb.AddPage(self.fft_panel, "Fourier")
+#        self.nb.AddPage(self.fourier_sum_panel, "Fourier sum")
+        self.nb.AddPage(self.brain_wave_panel, "Brain waves")
         sizer = wx.BoxSizer()
         sizer.Add(self.nb, 1, wx.EXPAND)
         self.panel.SetSizer(sizer)

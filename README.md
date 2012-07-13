@@ -10,9 +10,11 @@ requirements
 * An unencrypted stream of EEG data (this can be obtained using the
   included daemon nervend, or with Kyle Machulis' emokit at 
   https://github.com/qdot/emokit)
-* python-edf (my fork at https://bitbucket.org/fractalcat/python-edf)
 * wxmpl (http://agni.phys.iit.edu/~kmcivor/wxmpl/)
 * Cython (http://www.cython.org/)
+
+In addition, python-edf (my fork at https://bitbucket.org/fractalcat/python-edf)
+is required to capture to EDF files.
 
 installation
 ============

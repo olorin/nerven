@@ -34,3 +34,12 @@ IMAGE_1020 = os.path.abspath(os.path.join(os.path.dirname(__file__), 'img', '102
 IMAGE_CREDIT_TEXT = "(image from http://en.wikipedia.org/wiki/File:21_electrodes_of_International_10-20_system_for_EEG.svg)"
 
 GENDERS = ('male', 'female') # yes, I know gender is not binary - EDF only accepts two values.
+
+BRAIN_WAVES = {
+    'delta' : (0.5, 4.0),
+    'theta' : (4.0, 7.0),
+    'alpha' : (7.0, 12.0),
+    'beta' : (12.0, 30.0),
+}
+
+

@@ -27,7 +27,7 @@ class CapturePanel(wx.Panel):
         self.fname_ctrl = wx.TextCtrl(self)
         browse_button = wx.Button(self, label='Choose file')
         self.fmt_select = wx.ComboBox(self, choices=writer.backends.keys(), style=wx.CB_READONLY)
-        self.fmt_select.SetValue('edf')
+        self.fmt_select.SetValue(writer.backends.keys()[0])
         self.cap_button = wx.ToggleButton(self, label='Capture')
         self.edf_ctrls = {}
         self.edf_ctrls['patient'] = (wx.TextCtrl(self),
