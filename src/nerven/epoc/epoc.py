@@ -12,7 +12,7 @@ class EpocPacket(object):
         self.physical = {}
         self.gyro = Gyro(0, 0)
 
-class EpocDevice(object):
+class BaseDevice(object):
     sensors = EPOC_MASK.keys()
 
     def __init__(self, stream_path="/dev/nervend"):
@@ -21,11 +21,11 @@ class EpocDevice(object):
         self.battery = -1
         self.init_tail()
         self.stream_path = stream_path
-        self.stream = open(stream_path, 'rb')
+        self.init_stream()
         self.update()
 
     def update(self):
-        pkt = self.stream.read(32)
+        pkt = self.read_data()
         self.cur_pkt = self._parse(pkt)
         self.update_tail(self.cur_pkt)
 
@@ -84,4 +84,13 @@ class EpocDevice(object):
         if c > 15:
             return None
         return sensors[c]
+
+class EpocDevice(BaseDevice):
+    def init_stream(self):
+        self.stream = open(self.stream_path, 'rb')
+
+    def read_data(self):
+        return self.stream.read(32)
+
+        
     

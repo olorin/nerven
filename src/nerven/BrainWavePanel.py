@@ -36,7 +36,7 @@ class BrainWavePanel(NervenPlotPanel):
             for wave in BRAIN_WAVES:
                 axes.plot(x, self.wave_tail[wave], label=wave)
             #axes.set_autoscale_on(True)
-            axes.set_ylim(0.0, 1.0)
+ #           axes.set_ylim(0.0, 1.0)
             axes.legend()
             self.plot.draw()
             fig.delaxes(axes)
@@ -47,9 +47,9 @@ class BrainWavePanel(NervenPlotPanel):
         for wave in wave_power:
             lower, upper = BRAIN_WAVES[wave]
             wave_power[wave] = self.get_bin(lower, upper, dft)
-        total_power = sum(wave_power.values())
-        for wave in wave_power:
-            wave_power[wave] /= total_power
+#        total_power = sum(wave_power.values())
+#        for wave in wave_power:
+#            wave_power[wave] /= total_power
         return wave_power
             
     def get_bin(self, lower, upper, dft_vals):
