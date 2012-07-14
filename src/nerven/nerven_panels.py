@@ -17,8 +17,8 @@ class NervenPlotPanel(NervenPanel):
 
     def init_plot(self):
         self.draw_counter = 1001
-        sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.plot = SensorPlot(self, SENSOR_PLOT_ID)
-        sizer.Add(self.plot, 1, wx.EXPAND)
-        self.SetSizer(sizer)
+        self.sizer.Add(self.plot, 1, wx.EXPAND)
+        self.SetSizer(self.sizer)
         self.plotted_axes = {}
