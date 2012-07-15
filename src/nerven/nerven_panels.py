@@ -10,9 +10,9 @@ class NervenPanel(wx.Panel):
         pass
 
 class NervenPlotPanel(NervenPanel):
-    def __init__(self, parent, epoc):
+    def __init__(self, parent, epoc_mgr):
         wx.Panel.__init__(self, parent)
-        self.epoc = epoc
+        self.epoc_mgr = epoc_mgr
         self.init_plot()
 
     def init_plot(self):

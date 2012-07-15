@@ -34,13 +34,13 @@ class BrainWavePanel(NervenPlotPanel):
         fig = self.plot.get_figure()
         axes = fig.gca()
         wave_power = dict([(k,0.0) for k,v in BRAIN_WAVES.items()])
-        for i, sensor in enumerate(self.epoc.sensors):
-            vals = np.array(self.epoc.sensor_tail[sensor], dtype='float')
+        for i, sensor in enumerate(self.epoc_mgr.device.sensors):
+            vals = np.array(self.epoc_mgr.device.sensor_tail[sensor], dtype='float')
             sensor_waves = self.extract_waves(vals)
             for k,v in sensor_waves.items():
                 wave_power[k] += v
         for wave in wave_power:
-            wave_power[wave] /= len(self.epoc.sensors)
+            wave_power[wave] /= len(self.epoc_mgr.device.sensors)
             self.wave_tail[wave].append(wave_power[wave])
         if draw:
             self.draw_counter = 0

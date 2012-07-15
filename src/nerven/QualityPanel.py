@@ -5,9 +5,9 @@ from colours import *
 from consts import *
 
 class QualityPanel(NervenPanel):
-    def __init__(self, parent, epoc):
+    def __init__(self, parent, epoc_mgr):
         wx.Panel.__init__(self, parent)
-        self.epoc = epoc
+        self.epoc_mgr = epoc_mgr
         self.pnl = wx.Panel(self)
         self.init_text()
         self.init_image()
@@ -43,20 +43,20 @@ class QualityPanel(NervenPanel):
         self.qual_text = {}
         self.colour_counter = 101
         wx.StaticText(self, label=IMAGE_CREDIT_TEXT, pos=(IMAGE_1020_X, IMAGE_1020_Y + IMAGE_1020_H + 25))
-        for i, s in enumerate(self.epoc.sensors):
+        for i, s in enumerate(self.epoc_mgr.device.sensors):
             y_pos = QUAL_TEXT_POS[1] + i*LINE_SIZE
             lbl = "%s: " % s
             pos = (QUAL_TEXT_POS[0], y_pos)
             wx.StaticText(self, label=lbl, pos=pos)
-            lbl = self._get_qual_lbl(self.epoc.sensor_q[s])
+            lbl = self._get_qual_lbl(self.epoc_mgr.device.sensor_q[s])
             pos = (QUAL_TEXT_POS[0] + 100, y_pos)
             self.qual_text[s] = wx.StaticText(self, label=lbl, pos=pos)
-            self._colour_text(self.qual_text[s], self.epoc.sensor_q[s])
+            self._colour_text(self.qual_text[s], self.epoc_mgr.device.sensor_q[s])
 
     def do_update(self):
         for sensor in self.qual_text:
             if self.colour_counter > 100:
-                val = self.epoc.sensor_q[sensor]
+                val = self.epoc_mgr.device.sensor_q[sensor]
                 lbl = self._get_qual_lbl(val)
                 self.qual_text[sensor].SetLabel(lbl)
                 self._colour_text(self.qual_text[sensor], val)

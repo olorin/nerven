@@ -1,1 +1,2 @@
-from epoc import EpocDevice
+from epoc import EpocDevice, ZeroDevice
+from EpocManager import EpocManager

@@ -8,9 +8,9 @@ from util import *
 from consts import *
 
 class CapturePanel(wx.Panel):
-    def __init__(self, parent, epoc):
+    def __init__(self, parent, epoc_mgr):
         wx.Panel.__init__(self, parent)
-        self.epoc = epoc
+        self.epoc_mgr = epoc_mgr
         self.capture_path = None
         self.cur_dir = os.path.expanduser("~")
         self.capture_on = False
@@ -63,10 +63,10 @@ class CapturePanel(wx.Panel):
             return
         writer_cls = writer.backends[backend]
         if backend != 'edf':
-            self.writer = writer_cls(self.capture_path, self.epoc)
+            self.writer = writer_cls(self.capture_path, self.epoc_mgr.device)
         else:
             edf_extra = self.get_edf_extra()
-            self.writer = writer_cls(self.capture_path, self.epoc, edf_extra)
+            self.writer = writer_cls(self.capture_path, self.epoc_mgr.device, edf_extra)
         self.npackets = 0
         for k in self.edf_ctrls:
             ec, lbl = self.edf_ctrls[k]
@@ -83,7 +83,7 @@ class CapturePanel(wx.Panel):
         self.capture_on = False
 
     def write_packet(self):
-        pkt = self.epoc.cur_pkt
+        pkt = self.epoc_mgr.device.cur_pkt
         self.writer.write_packet(pkt)
         self.npackets += 1
 

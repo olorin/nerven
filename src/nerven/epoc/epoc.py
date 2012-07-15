@@ -92,5 +92,24 @@ class EpocDevice(BaseDevice):
     def read_data(self):
         return self.stream.read(32)
 
+class ZeroDevice(BaseDevice):
+    def init_stream(self):
+        self.stream = open('/dev/zero', 'rb')
+
+    def read_data(self):
+        return ''.join(['\0']*32)
+
+    def _parse(self, pkt):
+        new_pkt = EpocPacket(pkt)
+        self.counter = 0
+        self.battery = 0
+        for sensor,mask in EPOC_MASK.items():
+            setattr(new_pkt, sensor, 0)
+            new_pkt.digital[sensor] = 0
+            new_pkt.physical[sensor] = 0.0
+            self.sensor_q[sensor] = 0.0
+        new_pkt.gyro = Gyro(0,0)
+        return new_pkt
+
         
     

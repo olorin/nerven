@@ -1,6 +1,6 @@
 import wx
 
-from epoc import EpocDevice
+from epoc import *
 from QualityPanel import QualityPanel
 from SensorPlotPanel import SensorPlotPanel
 from CapturePanel import CapturePanel
@@ -23,17 +23,19 @@ class NervenFrame(wx.Frame):
         self.draw_counter = 1001
         self.Show(True)
         self.Maximize(True)
-
-    def _init_epoc(self):
-        done = False
-        try:
-            self.epoc = EpocDevice(self.opts.stream_path)
-            done = True
-        except IOError:
+        if not self.have_epoc:
             dlg = wx.MessageDialog(self, "Cannot open EEG data stream at %s." % self.opts.stream_path, "Error", wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
-            self.Close(True)
+
+
+    def _init_epoc(self):
+        self.epoc_mgr = EpocManager(ZeroDevice())
+        try:
+            self.epoc_mgr.device = EpocDevice(self.opts.stream_path)
+            self.have_epoc = True
+        except IOError:
+            self.have_epoc = False
 
     def _set_poll_timer(self):
         self.timer = wx.Timer(self, POLL_TIMER_ID)
@@ -46,12 +48,12 @@ class NervenFrame(wx.Frame):
     def init_notebook(self):
         self.panel = wx.Panel(self)
         self.nb = wx.Notebook(self.panel)
-        self.capture_panel = CapturePanel(self.nb, self.epoc)
-        self.qual_panel = QualityPanel(self.nb, self.epoc)
-        self.plot_panel = SensorPlotPanel(self.nb, self.epoc)
-#        self.fft_panel = FftPanel(self.nb, self.epoc)
-#        self.fourier_sum_panel = FourierSumPanel(self.nb, self.epoc)
-        self.brain_wave_panel = BrainWavePanel(self.nb, self.epoc)
+        self.capture_panel = CapturePanel(self.nb, self.epoc_mgr)
+        self.qual_panel = QualityPanel(self.nb, self.epoc_mgr)
+        self.plot_panel = SensorPlotPanel(self.nb, self.epoc_mgr)
+#        self.fft_panel = FftPanel(self.nb, self.epoc_mgr.device)
+#        self.fourier_sum_panel = FourierSumPanel(self.nb, self.epoc_mgr.device)
+        self.brain_wave_panel = BrainWavePanel(self.nb, self.epoc_mgr)
         self.nb.AddPage(self.capture_panel, "Capture")
         self.nb.AddPage(self.qual_panel, "Sensor quality")
         self.nb.AddPage(self.plot_panel, "Plot")
@@ -82,9 +84,9 @@ class NervenFrame(wx.Frame):
         self.draw_counter = 0
         fields = [
             'capture: %s' % (('on (%s)' % self.capture_panel.writer.running()) if self.capture_panel.capture_on else 'off'),
-            'x: %d' % self.epoc.cur_pkt.gyro.x,
-            'y: %d' % self.epoc.cur_pkt.gyro.y,
-            'battery: %d%%' % self.epoc.battery,
+            'x: %d' % self.epoc_mgr.device.cur_pkt.gyro.x,
+            'y: %d' % self.epoc_mgr.device.cur_pkt.gyro.y,
+            'battery: %d%%' % self.epoc_mgr.device.battery,
             ]
         self.status_bar.SetFields(fields)
 
@@ -97,7 +99,7 @@ class NervenFrame(wx.Frame):
         dialog.Destroy()
 
     def on_poll(self, e):
-        self.epoc.update()
+        self.epoc_mgr.device.update()
         self.update_status_bar()
         if self.capture_panel.capture_on:
             self.capture_panel.write_packet()
