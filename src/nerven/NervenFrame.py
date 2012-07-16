@@ -4,8 +4,8 @@ from epoc import *
 from QualityPanel import QualityPanel
 from SensorPlotPanel import SensorPlotPanel
 from CapturePanel import CapturePanel
-from FftPanel import FftPanel
-from FourierSumPanel import FourierSumPanel
+from PlaybackPanel import PlaybackPanel
+from FourierPanel import FourierPanel
 from BrainWavePanel import BrainWavePanel
 from consts import *
 from conf import *
@@ -49,16 +49,17 @@ class NervenFrame(wx.Frame):
         self.panel = wx.Panel(self)
         self.nb = wx.Notebook(self.panel)
         self.capture_panel = CapturePanel(self.nb, self.epoc_mgr)
+        self.playback_panel = PlaybackPanel(self.nb, self.epoc_mgr)
         self.qual_panel = QualityPanel(self.nb, self.epoc_mgr)
         self.plot_panel = SensorPlotPanel(self.nb, self.epoc_mgr)
-#        self.fft_panel = FftPanel(self.nb, self.epoc_mgr.device)
-#        self.fourier_sum_panel = FourierSumPanel(self.nb, self.epoc_mgr.device)
+        self.fourier_panel = FourierPanel(self.nb, self.epoc_mgr)
         self.brain_wave_panel = BrainWavePanel(self.nb, self.epoc_mgr)
         self.nb.AddPage(self.capture_panel, "Capture")
+        self.nb.AddPage(self.playback_panel, "Playback")
         self.nb.AddPage(self.qual_panel, "Sensor quality")
         self.nb.AddPage(self.plot_panel, "Plot")
 #        self.nb.AddPage(self.fft_panel, "Fourier")
-#        self.nb.AddPage(self.fourier_sum_panel, "Fourier sum")
+        self.nb.AddPage(self.fourier_panel, "Fourier")
         self.nb.AddPage(self.brain_wave_panel, "Brain waves")
         sizer = wx.BoxSizer()
         sizer.Add(self.nb, 1, wx.EXPAND)

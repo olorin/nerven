@@ -17,6 +17,8 @@ EPOC_MASK = {
   'FC5': [28, 29, 30, 31, 16, 17, 18, 19, 20, 21, 22, 23, 8, 9]
 }
 
+PKT_SIZE = 32
+
 SENSOR_DIG_MAX = 8192
 SENSOR_PHYS_MAX = 15.7
 

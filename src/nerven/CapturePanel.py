@@ -16,6 +16,10 @@ class CapturePanel(wx.Panel):
         self.capture_on = False
         self.init_controls()
         self.Show(True)
+        self.Layout()
+        # hidden after callling Layout so the formatting works
+        if self.fmt_select.GetValue() != 'edf':
+            self.show_edf_ctrls(False)
 
     def do_update(self):
         pass
@@ -87,6 +91,12 @@ class CapturePanel(wx.Panel):
         self.writer.write_packet(pkt)
         self.npackets += 1
 
+    def show_edf_ctrls(self, visible):
+        for k in self.edf_ctrls:
+            ec, lbl = self.edf_ctrls[k]
+            ec.Show(visible)
+            lbl.Show(visible)
+
     def on_capture_btn(self, e):
         val = self.cap_button.GetValue()
         if val == self.capture_on:
@@ -98,10 +108,7 @@ class CapturePanel(wx.Panel):
 
     def on_fmt_select(self, e):
         edf = self.fmt_select.GetValue() == 'edf'
-        for k in self.edf_ctrls:
-            ec, lbl = self.edf_ctrls[k]
-            ec.Show(edf)
-            lbl.Show(edf)
+        self.show_edf_ctrls(edf)
 
     def on_browse(self, e):
         ext = self.fmt_select.GetValue()

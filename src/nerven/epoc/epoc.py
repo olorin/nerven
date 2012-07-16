@@ -90,14 +90,17 @@ class EpocDevice(BaseDevice):
         self.stream = open(self.stream_path, 'rb')
 
     def read_data(self):
-        return self.stream.read(32)
+        pkt = self.stream.read(PKT_SIZE)
+        if len(pkt) != PKT_SIZE:
+            print("warning: don't have a full packet, only read %d bytes." % len(pkt))
+        return pkt
 
 class ZeroDevice(BaseDevice):
     def init_stream(self):
         self.stream = open('/dev/zero', 'rb')
 
     def read_data(self):
-        return ''.join(['\0']*32)
+        return ''.join(['\0']*PKT_SIZE)
 
     def _parse(self, pkt):
         new_pkt = EpocPacket(pkt)
