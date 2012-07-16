@@ -7,13 +7,15 @@ from CapturePanel import CapturePanel
 from PlaybackPanel import PlaybackPanel
 from FourierPanel import FourierPanel
 from BrainWavePanel import BrainWavePanel
+from PrefsPanel import PrefsPanel
 from consts import *
-from conf import *
+from config import NervenConfig
 
 class NervenFrame(wx.Frame):
     def __init__(self, parent, id, opts):
         wx.Frame.__init__(self, parent, MAIN_FRAME_ID, MAIN_TITLE)
         self.opts = opts
+        self.cfg = NervenConfig(create=True)
         self.status_bar = self.CreateStatusBar(STATUS_FIELDS)
         self._create_menu()
         self._set_poll_timer()
@@ -24,7 +26,7 @@ class NervenFrame(wx.Frame):
         self.Show(True)
         self.Maximize(True)
         if not self.have_epoc:
-            dlg = wx.MessageDialog(self, "Cannot open EEG data stream at %s." % self.opts.stream_path, "Error", wx.OK)
+            dlg = wx.MessageDialog(self, "Cannot open EEG data stream at %s." % self.cfg['data_path'], "Error", wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
 
@@ -32,7 +34,7 @@ class NervenFrame(wx.Frame):
     def _init_epoc(self):
         self.epoc_mgr = EpocManager(ZeroDevice())
         try:
-            self.epoc_mgr.device = EpocDevice(self.opts.stream_path)
+            self.epoc_mgr.device = EpocDevice(self.cfg['data_path'])
             self.have_epoc = True
         except IOError:
             self.have_epoc = False
@@ -68,6 +70,7 @@ class NervenFrame(wx.Frame):
     def _create_menu(self):
         bar = wx.MenuBar()
         bar.Append(self._create_menu_file(), "&File")
+        bar.Append(self._create_menu_edit(), "&Edit")
         self.SetMenuBar(bar)
 
     def _create_menu_file(self):
@@ -76,6 +79,12 @@ class NervenFrame(wx.Frame):
         exit_ = menu.Append(wx.ID_EXIT, "E&xit", "Exit nerven")
         self.Bind(wx.EVT_MENU, self.on_exit, exit_)
         self.Bind(wx.EVT_MENU, self.on_about, about)
+        return menu
+
+    def _create_menu_edit(self):
+        menu = wx.Menu()
+        prefs = menu.Append(-1, "&Preferences", "Edit preferences")
+        self.Bind(wx.EVT_MENU, self.on_prefs, prefs)
         return menu
 
     def update_status_bar(self):
@@ -98,6 +107,15 @@ class NervenFrame(wx.Frame):
         dialog = wx.MessageDialog(self, ABOUT_TEXT, ABOUT_TITLE, wx.OK)
         dialog.ShowModal()
         dialog.Destroy()
+
+    def on_prefs(self, e):
+        page_idx = self.nb.GetPageCount()
+        cur_page = self.nb.GetSelection()
+        def delete_callback():
+            self.nb.RemovePage(page_idx)
+            self.nb.SetSelection(cur_page)
+        pnl = PrefsPanel(self.nb, delete_callback)
+        self.nb.AddPage(pnl, "Preferences", select=True)
 
     def on_poll(self, e):
         self.epoc_mgr.device.update()
