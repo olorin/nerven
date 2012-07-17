@@ -1,6 +1,7 @@
 import wx
 
 from config import NervenConfig
+from callbacks import nerven_callbacks as callbacks
 
 class PrefsPanel(wx.Panel):
     def __init__(self, parent, delete_callback=None):
@@ -28,7 +29,6 @@ class PrefsPanel(wx.Panel):
             sizer.Add(hsizer)
         self.save_btn = wx.Button(self, label='Save')
         self.close_btn = wx.Button(self, label='Close')
-        lbl = wx.StaticText(self, label="Your settings will take effect the next time you start nerven.")
         self.Bind(wx.EVT_BUTTON, self.on_save, self.save_btn)
         self.Bind(wx.EVT_BUTTON, self.on_close, self.close_btn)
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -37,7 +37,6 @@ class PrefsPanel(wx.Panel):
         sizer.AddSpacer((0,10))
         sizer.Add(hsizer)
         sizer.AddSpacer((0,10))
-        sizer.Add(lbl)
         self.SetSizer(sizer)
 
     def do_update(self):
@@ -55,6 +54,8 @@ class PrefsPanel(wx.Panel):
         for key in self.cfg.options:
             self.cfg[key] = self.opt_ctrls[key].GetValue()
         self.cfg.write()
+        for cb in callbacks['update_config']:
+            cb()
         self.close()
 
 

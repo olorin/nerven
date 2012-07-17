@@ -2,6 +2,7 @@ from collections import namedtuple
 import wx
 
 from exceptions import *
+from callbacks import nerven_callbacks as callbacks
 
 ConfigOption = namedtuple('ConfigOption', ['description', 'type', 'default'])
 
@@ -17,6 +18,7 @@ class NervenConfig(object):
         self.cfg = cfg
         if self.cfg is None:
             self.cfg = wx.Config('nerven')
+        callbacks['update_config'].append(self.update)
 
         self.getters = {
                 'string' : lambda k: self.cfg.Read(k),
@@ -49,6 +51,10 @@ class NervenConfig(object):
 
     def write(self):
         return self.cfg.Flush()
+
+    def update(self):
+        '''There should be a better way to do this...'''
+        self.cfg = wx.Config('nerven')
 
     def __getitem__(self, key):
         return self.get(key)
