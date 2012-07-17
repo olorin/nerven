@@ -1,5 +1,6 @@
 import wx, wxmpl
 from consts import *
+from config import NervenConfig
 
 class SensorPlot(wxmpl.PlotPanel):
     pass
@@ -13,6 +14,7 @@ class NervenPlotPanel(NervenPanel):
     def __init__(self, parent, epoc_mgr):
         wx.Panel.__init__(self, parent)
         self.epoc_mgr = epoc_mgr
+        self.cfg = NervenConfig()
         self.init_plot()
 
     def init_plot(self):

@@ -33,6 +33,9 @@ class BrainWavePanel(NervenPlotPanel):
         axes = fig.gca()
         wave_power = dict([(k,0.0) for k,v in BRAIN_WAVES.items()])
         for i, sensor in enumerate(self.epoc_mgr.device.sensors):
+            if self.cfg['only_use_good_sensors']:
+                if self.epoc_mgr.device.sensor_q[sensor] < self.cfg['contact_qual_threshold']:
+                    continue
             vals = np.array(self.epoc_mgr.device.sensor_tail[sensor], dtype='float')
             sensor_waves = self.extract_waves(vals)
             for k,v in sensor_waves.items():

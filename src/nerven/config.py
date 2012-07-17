@@ -9,6 +9,8 @@ class NervenConfig(object):
     options = {
             'data_path' : ConfigOption('Path to EPOC raw data', 'string', '/dev/nervend'),
             'normalize_brainwaves' : ConfigOption('Normalize brain wave power', 'bool', False),
+            'only_use_good_sensors' : ConfigOption('Only use sensors with a contact quality above a certain value for calculating brain wave power.', 'bool', False),
+            'contact_qual_threshold' : ConfigOption('Contact quality threshold for calculation of brain wave power.', 'float', '0.8'),
             }
 
     def __init__(self, create=False, cfg=None):
@@ -25,8 +27,8 @@ class NervenConfig(object):
 
         self.setters = {
                 'string' : lambda k,v: self.cfg.Write(k,v),
-                'float' : lambda k,v: self.cfg.WriteFloat(k,v),
-                'int' : lambda k,v: self.cfg.WriteInt(k,v),
+                'float' : lambda k,v: self.cfg.WriteFloat(k,float(v)),
+                'int' : lambda k,v: self.cfg.WriteInt(k,int(v)),
                 'bool' : lambda k,v: self.cfg.WriteBool(k,v),
                 }
 

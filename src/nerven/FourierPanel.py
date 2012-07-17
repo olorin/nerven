@@ -17,6 +17,9 @@ class FourierPanel(NervenPlotPanel):
             axes = fig.gca()
             acc_fft = np.array([0.0]*(SAMPLE_FREQ*TAIL_LEN/2+1), dtype='float')
             for i, sensor in enumerate(self.epoc_mgr.device.sensors):
+                if self.cfg['only_use_good_sensors']:
+                    if self.epoc_mgr.device.sensor_q[sensor] < self.cfg['contact_qual_threshold']:
+                        continue
                 self.draw_counter = 0
                 vals = np.array(self.epoc_mgr.device.sensor_tail[sensor], dtype='float')
                 sensor_fft = abs(fft.rfft(vals))

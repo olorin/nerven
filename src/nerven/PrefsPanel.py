@@ -20,7 +20,7 @@ class PrefsPanel(wx.Panel):
                 self.opt_ctrls[key].SetValue(self.cfg[key])
                 hsizer.Add(self.opt_ctrls[key])
             else:
-                self.opt_ctrls[key] = wx.TextCtrl(self, value=self.cfg[key])
+                self.opt_ctrls[key] = wx.TextCtrl(self, value=str(self.cfg[key]))
                 lbl = wx.StaticText(self, label=op.description)
                 hsizer.Add(self.opt_ctrls[key], 1, wx.EXPAND)
                 hsizer.AddSpacer((10,0))

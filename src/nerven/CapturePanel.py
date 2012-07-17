@@ -112,6 +112,8 @@ class CapturePanel(wx.Panel):
 
     def on_browse(self, e):
         ext = self.fmt_select.GetValue()
+        if ext == 'raw':
+            ext = 'epoc'
         wildcard = "*.%s" % ext
         dlg = wx.FileDialog(self, "Select output file", self.cur_dir, "", wildcard, wx.SAVE)
         if dlg.ShowModal() == wx.ID_OK:
