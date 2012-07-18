@@ -1,7 +1,11 @@
 from collections import namedtuple, defaultdict, deque
 import numpy as np
 from epoc_bits import *
-import _parse
+try:
+    import _parse
+    cython_exts = True
+except ImportError:
+    cython_exts = False
 
 Gyro = namedtuple('Gyro', ['x', 'y'])
 
@@ -19,6 +23,10 @@ class BaseDevice(object):
         self.cur_pkt = None
         self.sensor_q = dict([(s, None) for s in self.sensors])
         self.battery = -1
+        if cython_exts:
+            self.get_level = _parse.get_level
+        else:
+            self.get_level = self._get_level
         self.init_tail()
         self.stream_path = stream_path
         self.init_stream()
@@ -53,7 +61,7 @@ class BaseDevice(object):
             batt = int(float(batt)/float(BATTERY_MAX-BATTERY_MIN)*100)
             self.battery = batt
         for sensor, mask in EPOC_MASK.items():
-            level = _parse.get_level(new_pkt.raw, mask)
+            level = self.get_level(new_pkt.raw, mask)
             level -= SENSOR_DIG_MAX
             new_pkt.digital[sensor] = level
             level = float(level)/SENSOR_DIG_MAX*SENSOR_PHYS_MAX
@@ -61,7 +69,7 @@ class BaseDevice(object):
             setattr(new_pkt, sensor, level)
         q_sensor = self._get_measured_sensor()
         if q_sensor is not None:
-            level = _parse.get_level(new_pkt.raw, QUAL_MASK)
+            level = self.get_level(new_pkt.raw, QUAL_MASK)
             level = float(level)/QUAL_NORM_FACTOR
             self.sensor_q[q_sensor] = level
         new_pkt.gyro = Gyro(ord(pkt[29]) - GYRO_OFFSET[0], 
@@ -69,6 +77,7 @@ class BaseDevice(object):
         return new_pkt
 
     def _get_level(self, pkt, mask):
+        pkt = map(chr, pkt)
         level = 0
         for i in range(13, -1, -1):
             level <<= 1
