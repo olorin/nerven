@@ -1,4 +1,4 @@
-import wx, scipy, scipy.fftpack
+import wx
 import numpy as np
 from numpy import fft
 
@@ -24,7 +24,7 @@ class FourierPanel(NervenPlotPanel):
                 vals = np.array(self.epoc_mgr.device.sensor_tail[sensor], dtype='float')
                 sensor_fft = abs(fft.rfft(vals))
                 acc_fft = np.add(acc_fft, sensor_fft)
-            freqs = scipy.fftpack.fftfreq(vals.size/2+1, d=(1.0/SAMPLE_FREQ))
+            freqs = fft.fftfreq(vals.size/2+1, d=(1.0/SAMPLE_FREQ))
             axes.plot(freqs, acc_fft, 'x')
             axes.set_xlabel('Hz')
             #axes.set_autoscale_on(True)

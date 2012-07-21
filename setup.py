@@ -13,7 +13,6 @@ setup(name='nerven',
       author_email='sio@tesser.org',
       requires=[
           'wxmpl',
-          'scipy',
           'numpy',
           ],
       cmdclass={'build_ext' : build_ext},

@@ -7,6 +7,15 @@ from consts import *
 class EdfWriter(EpocWriter):
     '''Writes European Data Format (EDF) files. Requires python-edflib.'''
     def __init__(self, outpath, epoc, extra={}):
+        '''EDF annotations can be passed as a python dict 'extra':
+
+            'patient' - patient name, string, <=80 chars
+            'gender' - patient sex, int, 1 for male and 0 for female
+            'birthdate' - Python date object
+            'patient_additional' - string, <=80 chars
+            
+        If the length of a string field is greater than the EDF maximum, it 
+        will be truncated.'''
         EpocWriter.__init__(self, outpath, epoc)
         self.handle = edf.open_file_writeonly(self.path, 1, N_CHANNELS)
         self.sensors = epoc.sensors
@@ -21,8 +30,6 @@ class EdfWriter(EpocWriter):
             edf.set_patientname(self.handle, patient)
         if extra.get('gender', None):
             gender = extra['gender']
-            if len(gender) > 15:
-                gender = gender[:15]
             edf.set_gender(self.handle, gender)
         if extra.get('patient_additional', None):
             additional = extra['patient_additional']
