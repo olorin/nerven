@@ -1,4 +1,4 @@
-import wx, scipy, scipy.fftpack
+import wx
 from collections import deque
 import numpy as np
 from nerven_panels import *
