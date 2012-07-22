@@ -27,11 +27,10 @@ LINE_SIZE = 20
 
 IMAGE_1020_X = 220
 IMAGE_1020_Y = 25
-IMAGE_1020_H = 447
+IMAGE_1020_H = 468
 IMAGE_1020_W = 500
 
 IMAGE_1020 = os.path.abspath(os.path.join(os.path.dirname(__file__), 'img', '1020.png'))
-IMAGE_CREDIT_TEXT = "(image from http://en.wikipedia.org/wiki/File:21_electrodes_of_International_10-20_system_for_EEG.svg)"
 
 GENDERS = ('male', 'female') # yes, I know gender is not binary - EDF only accepts two values.
 

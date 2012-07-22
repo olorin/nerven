@@ -2,7 +2,8 @@ nerven
 ======
 
 nerven is a visualisation and capture utility for the Emotiv EPOC. It
-was written by Sharif Olorin, who can be reached at sio@tesser.org. 
+was written by Sharif Olorin (sio@tesser.org) with contributions from 
+Sarah Bennett (https://github.com/sarahbennett).
 
 Currently it only runs (out of the box) on Linux; if you use another
 operating system and would like to use nerven, email me.

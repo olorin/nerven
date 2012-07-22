@@ -42,7 +42,6 @@ class QualityPanel(NervenPanel):
     def init_text(self):
         self.qual_text = {}
         self.colour_counter = 101
-        wx.StaticText(self, label=IMAGE_CREDIT_TEXT, pos=(IMAGE_1020_X, IMAGE_1020_Y + IMAGE_1020_H + 25))
         for i, s in enumerate(self.epoc_mgr.device.sensors):
             y_pos = QUAL_TEXT_POS[1] + i*LINE_SIZE
             lbl = "%s: " % s
