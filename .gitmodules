@@ -1,0 +1,3 @@
+[submodule "util/nervend"]
+	path = util/nervend
+	url = git://github.com/fractalcat/nervend.git
