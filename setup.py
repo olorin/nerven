@@ -1,10 +1,15 @@
 import sys
+
+import numpy
+
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 ext_modules = [
-    Extension("nerven.epoc._parse", ["src/nerven/epoc/_parse.pyx"])
+    Extension("nerven.epoc._parse",
+        sources=["src/nerven/epoc/_parse.pyx"],
+        include_dirs=[".", numpy.get_include()]),
 ]
 
 setup(name='nerven',
