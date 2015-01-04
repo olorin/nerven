@@ -5,6 +5,12 @@ nerven is a visualisation and capture utility for the Emotiv EPOC.
 Currently it only runs (out of the box) on Linux; let me know if you 
 get it working on another system.
 
+## Achtung
+
+I haven't worked on this for a while and most likely will not for a
+while. If anyone would like to take over maintainership, please let me
+know.
+
 Authors/contributors
 ====================
 
